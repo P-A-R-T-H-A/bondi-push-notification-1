@@ -14,5 +14,5 @@ import (
 )
 
 func init() {
-	beego.RESTRouter("/getVapidPublicKey", &controllers.VapidController{})
+	beego.RESTRouter("/v1/getVapidPublicKey", &controllers.VapidController{})
 }

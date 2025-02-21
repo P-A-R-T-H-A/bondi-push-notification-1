@@ -10,3 +10,4 @@ sqlconn =
 [PUSH]
 VapidPublicKey = ""
 VapidPrivateKey = ""
+XApiKey = ""
