@@ -10,3 +10,20 @@ type PushSubscribers struct {
 	P256dh    string    `orm:"unique"`
 	CreatedAt time.Time `orm:"auto_now_add;type(datetime)"`
 }
+
+type PushNotificationSubscription struct {
+	StudentId string
+	Notification NotificationSubscription
+	Success bool
+	Error   string
+	Message string
+}
+
+type NotificationSubscription struct {
+	Endpoint       string
+	ExpirationTime any
+	Keys           struct {
+		P256Dh string
+		Auth   string
+	}
+}
