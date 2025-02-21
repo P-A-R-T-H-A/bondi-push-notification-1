@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	cruds "bondi-push-notification/curds"
 	"net/http"
 	"strings"
 
+	"github.com/beego/beego/v2/core/logs"
 	beego "github.com/beego/beego/v2/server/web"
 )
 
@@ -11,11 +13,17 @@ type baseController struct {
 	beego.Controller
 }
 
-// func (u *baseController) Prepare() {
-// 	if unAuthorized := u.apiAuth(); unAuthorized {
-// 		return
-// 	}
-// }
+func init() {
+	if err := cruds.Initialize(); err != nil {
+		logs.Error(err)
+	}
+}
+
+//	func (u *baseController) Prepare() {
+//		if unAuthorized := u.apiAuth(); unAuthorized {
+//			return
+//		}
+//	}
 func (u *baseController) getHeaderByName(headerName string) string {
 	headerValue := u.Ctx.Request.Header.Get(headerName)
 	if headerValue == "" {
