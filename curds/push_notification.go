@@ -59,7 +59,7 @@ func SendNotificationToRegisteredStudent(studentIds []interface{}, notification 
 	notificationPayload = map[string]interface{}{
 		"title": "Bondi Pathshala",
 		"body":  notification.NotificationContent,
-		"icon":  "https://www.bondipathshala.education/static/img/logo.png",
+		"icon":  "https://www.bondipathshala.education/static/img/logo-mini.png",
 		"image": notification.NotificationImage,
 	}
 	if notification.Url != "" {
