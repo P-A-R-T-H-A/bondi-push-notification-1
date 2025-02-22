@@ -22,15 +22,15 @@ echo "killing the running docker"
 docker system prune -f
 
 # Check if there are any containers matching the pattern before attempting to kill them
-if docker ps -a | grep -q 'bondi-api'; then
-    docker ps -a | grep 'bondi-api' | awk '{print $1}' | xargs docker stop --time=5
-    #docker ps -a | grep 'bondi-api' | awk '{print $1}' | xargs docker kill --time=5
-    docker ps -a | grep 'bondi-api' | awk '{print $1}' | xargs docker rm
+if docker ps -a | grep -q 'bondi-push-notifier'; then
+    docker ps -a | grep 'bondi-push-notifier' | awk '{print $1}' | xargs docker stop --time=5
+    #docker ps -a | grep 'bondi-push-notifier' | awk '{print $1}' | xargs docker kill --time=5
+    docker ps -a | grep 'bondi-push-notifier' | awk '{print $1}' | xargs docker rm
 else
-    echo "No containers matching the pattern 'bondi-api' found."
+    echo "No containers matching the pattern 'bondi-push-notifier' found."
 fi
 
-echo "running the bondi-api using docker"
+echo "running the bondi-push-notifier using docker"
 docker run -d --restart=unless-stopped --name bondi-push-notifier -p 8070:8070 bondi-push-notifier
 
 echo "we are done!"
