@@ -4,12 +4,14 @@ import (
 	cruds "bondi-push-notification/curds"
 	"bondi-push-notification/models"
 	"encoding/json"
-
-	beego "github.com/beego/beego/v2/server/web"
 )
 
 type SubscriptionController struct {
-	beego.Controller
+	baseController
+}
+
+type SendPushNotification struct {
+	baseController
 }
 
 func (c *SubscriptionController) Post() {
@@ -38,5 +40,51 @@ func (c *SubscriptionController) Post() {
 	}
 	c.Ctx.Output.SetStatus(201)
 	c.Data["json"] = map[string]string{"Message": "Subscription data stored successfully"}
+	c.ServeJSON()
+}
+
+func (c *SendPushNotification) Get() {
+	var (
+		messageId    = c.Ctx.Input.Param(":messageId")
+		params       = c.Ctx.Request.URL.Query()
+		requestType  = params.Get("type")
+		courseId     = params.Get("id")
+		studentIds   = []interface{}{}
+		notification models.PushNotification
+	)
+	var err error
+	if messageId == "" {
+		c.Ctx.Output.SetStatus(400)
+		c.Data["json"] = map[string]string{"Message": "Message ID is required"}
+		c.ServeJSON()
+		return
+	} else {
+		notification, err = cruds.GetNotificationData(messageId)
+		if err != nil {
+			c.Ctx.Output.SetStatus(400)
+			c.Data["json"] = map[string]string{"Message": err.Error()}
+			c.ServeJSON()
+			return
+		}
+	}
+	if requestType != "" && courseId != "" {
+		studentIds, err = cruds.GetCourseWiseStudentIds(courseId)
+		if err != nil {
+			c.Ctx.Output.SetStatus(400)
+			c.Data["json"] = map[string]string{"Message": err.Error()}
+			c.ServeJSON()
+			return
+		}
+	}
+	err = cruds.SendNotificationToRegisteredStudent(studentIds, notification)
+	if err != nil {
+		c.Ctx.Output.SetStatus(400)
+		c.Data["json"] = map[string]string{"Message": err.Error()}
+		c.ServeJSON()
+		return
+	}
+
+	c.Ctx.Output.SetStatus(200)
+	c.Data["json"] = studentIds
 	c.ServeJSON()
 }

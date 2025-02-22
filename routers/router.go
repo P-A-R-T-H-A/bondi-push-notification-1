@@ -16,4 +16,5 @@ import (
 func init() {
 	beego.RESTRouter("/v1/getVapidPublicKey", &controllers.VapidController{})
 	beego.RESTRouter("/v1/savePushSubscription", &controllers.SubscriptionController{})
+	beego.RESTRouter("/v1/sendPushNotification/:messageId", &controllers.SendPushNotification{})
 }

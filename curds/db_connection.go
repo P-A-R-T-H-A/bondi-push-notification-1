@@ -10,8 +10,9 @@ import (
 )
 
 func Initialize() error {
-	// Model Registration
 	orm.RegisterModel(new(models.PushSubscribers))
+	orm.RegisterModel(new(models.StudentCourse))
+	orm.RegisterModel(new(models.PushNotification))
 
 	if err := orm.RegisterDriver("postgres", orm.DRPostgres); err != nil {
 		return err
@@ -24,12 +25,9 @@ func Initialize() error {
 	port, _ := beego.AppConfig.String("PG::Port")
 	dns := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%s sslmode=require", user, password, dbName, host, port)
 	// dns := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%s sslmode=disable", user, password, dbName, host, port)
-	// Database Registration
 	if err := orm.RegisterDataBase("default", "postgres", dns); err != nil {
 		return err
 	}
-
-	// Create Table
 	if err := orm.RunSyncdb("default", false, true); err != nil {
 		return err
 	}
