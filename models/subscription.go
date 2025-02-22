@@ -31,10 +31,10 @@ type PushNotification struct {
 
 type PushSubscribers struct {
 	Id        int       `orm:"auto;pk"`
-	StudentId string    `orm:"unique"`
-	Endpoint  string    `orm:"unique"`
-	Auth      string    `orm:"unique"`
-	P256dh    string    `orm:"unique"`
+	StudentId string    `orm:"null"`
+	Endpoint  string    `orm:"null"`
+	Auth      string    `orm:"null"`
+	P256dh    string    `orm:"null"`
 	CreatedAt time.Time `orm:"auto_now_add;type(datetime)"`
 }
 
