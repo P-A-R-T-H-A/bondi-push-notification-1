@@ -24,6 +24,7 @@ type PushNotification struct {
 	CreatorName         string
 	NotificationContent string `orm:"type(text)"`
 	NotificationImage   string `orm:"null"`
+	Url     string `orm:"null"`
 	Status              string
 	CreatedAt           time.Time `orm:"auto_now_add;type(datetime)"`
 	UpdatedAt           time.Time `orm:"auto_now;type(datetime)"`

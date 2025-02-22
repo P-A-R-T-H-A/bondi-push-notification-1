@@ -57,10 +57,13 @@ func SendNotificationToRegisteredStudent(studentIds []interface{}, notification 
 	}
 
 	notificationPayload = map[string]interface{}{
-		"title": "Bondipathshala",
+		"title": "Bondi Pathshala",
 		"body":  notification.NotificationContent,
 		"icon":  "https://www.bondipathshala.education/static/img/logo.png",
 		"image": notification.NotificationImage,
+	}
+	if notification.Url != "" {
+		notificationPayload["link"] = notification.Url
 	}
 	payloadBytes, err := json.Marshal(notificationPayload)
 	if err != nil {
