@@ -2,9 +2,13 @@ package cruds
 
 import (
 	"bondi-push-notification/models"
+	"encoding/json"
 	"fmt"
+	"net/http"
 
+	"github.com/SherClockHolmes/webpush-go"
 	"github.com/beego/beego/v2/client/orm"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
 func GetCourseWiseStudentIds(courseId string) ([]interface{}, error) {
@@ -34,9 +38,14 @@ func GetNotificationData(messageId string) (models.PushNotification, error) {
 }
 
 func SendNotificationToRegisteredStudent(studentIds []interface{}, notification models.PushNotification) error {
+
 	var (
-		results []models.PushSubscribers
+		results             []models.PushSubscribers
+		notificationPayload = map[string]interface{}{}
+		privateKey, _       = beego.AppConfig.String("PUSH::VapidPrivateKey")
+		publicKey, _        = beego.AppConfig.String("PUSH::VapidPublicKey")
 	)
+
 	o := orm.NewOrm()
 	qs := o.QueryTable(new(models.PushSubscribers))
 	if len(studentIds) > 0 {
@@ -48,6 +57,39 @@ func SendNotificationToRegisteredStudent(studentIds []interface{}, notification 
 		return err
 	}
 
-	fmt.Print(results)
+	notificationPayload = map[string]interface{}{
+		"title": "Bondipathshala",
+		"body":  notification.NotificationContent,
+		"icon":  "https://www.bondipathshala.education/static/img/logo.png",
+		"image": notification.NotificationImage,
+	}
+	payloadBytes, err := json.Marshal(notificationPayload)
+	if err != nil {
+		return err
+	}
+
+	for i, data := range results {
+		var Keys = webpush.Keys{
+			Auth:   data.Auth,
+			P256dh: data.P256dh,
+		}
+		var subscription = webpush.Subscription{
+			Endpoint: data.Endpoint,
+			Keys:     Keys,
+		}
+
+		resp, err := webpush.SendNotification(payloadBytes, &subscription, &webpush.Options{
+			Subscriber:      "mailto:admin@bondipathshala.education",
+			VAPIDPrivateKey: privateKey,
+			VAPIDPublicKey:  publicKey,
+		})
+		if resp.StatusCode == http.StatusGone {
+			o.Delete(&results[i])
+			return nil
+		} else if err != nil {
+			return err
+		}
+		fmt.Println(resp)
+	}
 	return nil
 }
