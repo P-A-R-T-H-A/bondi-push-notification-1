@@ -31,6 +31,6 @@ else
 fi
 
 echo "running the bondi-api using docker"
-docker run -d --restart=unless-stopped --name bondi-push-notifier -p 8080:8080 bondi-push-notifier
+docker run -d --restart=unless-stopped --name bondi-push-notifier -p 8070:8070 bondi-push-notifier
 
 echo "we are done!"
