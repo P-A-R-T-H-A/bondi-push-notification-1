@@ -12,18 +12,19 @@ type PushSubscribers struct {
 }
 
 type PushNotificationSubscription struct {
-	StudentId string
+	StudentId    string
 	Notification NotificationSubscription
-	Success bool
-	Error   string
-	Message string
+	Success      bool
+	Error        string
+	Message      string
 }
 
 type NotificationSubscription struct {
 	Endpoint       string
 	ExpirationTime any
-	Keys           struct {
-		P256Dh string
-		Auth   string
-	}
+	Keys           Keys
+}
+type Keys struct {
+	P256Dh string
+	Auth   string
 }
