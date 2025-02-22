@@ -59,7 +59,7 @@ func SendNotificationToRegisteredStudent(studentIds []interface{}, notification 
 	notificationPayload = map[string]interface{}{
 		"title": "Bondipathshala",
 		"body":  notification.NotificationContent,
-		"icon":  "http://www.bondipathshala.education/static/img/logo.png",
+		"icon":  "https://www.bondipathshala.education/static/img/logo.png",
 		"image": notification.NotificationImage,
 	}
 	payloadBytes, err := json.Marshal(notificationPayload)
