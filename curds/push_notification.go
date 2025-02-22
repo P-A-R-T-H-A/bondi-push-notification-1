@@ -3,7 +3,6 @@ package cruds
 import (
 	"bondi-push-notification/models"
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/SherClockHolmes/webpush-go"
@@ -60,7 +59,7 @@ func SendNotificationToRegisteredStudent(studentIds []interface{}, notification 
 	notificationPayload = map[string]interface{}{
 		"title": "Bondipathshala",
 		"body":  notification.NotificationContent,
-		"icon":  "https://www.bondipathshala.education/static/img/logo.png",
+		"icon":  "http://www.bondipathshala.education/static/img/logo.png",
 		"image": notification.NotificationImage,
 	}
 	payloadBytes, err := json.Marshal(notificationPayload)
@@ -82,6 +81,7 @@ func SendNotificationToRegisteredStudent(studentIds []interface{}, notification 
 			Subscriber:      "mailto:admin@bondipathshala.education",
 			VAPIDPrivateKey: privateKey,
 			VAPIDPublicKey:  publicKey,
+			TTL:             60,
 		})
 		if resp.StatusCode == http.StatusGone {
 			o.Delete(&results[i])
@@ -89,7 +89,6 @@ func SendNotificationToRegisteredStudent(studentIds []interface{}, notification 
 		} else if err != nil {
 			return err
 		}
-		fmt.Println(resp)
 	}
 	return nil
 }
