@@ -3,6 +3,7 @@ package cruds
 import (
 	"bondi-push-notification/models"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/SherClockHolmes/webpush-go"
@@ -86,6 +87,7 @@ func SendNotificationToRegisteredStudent(studentIds []interface{}, notification 
 			VAPIDPublicKey:  publicKey,
 			TTL:             60,
 		})
+		fmt.Println(resp.StatusCode)
 		if resp.StatusCode == http.StatusGone {
 			o.Delete(&results[i])
 			return nil
