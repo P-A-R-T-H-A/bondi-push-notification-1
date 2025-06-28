@@ -101,8 +101,6 @@ func SendNotificationToRegisteredStudent(studentIds []interface{}, notification 
 				errCh <- fmt.Errorf("student %v: %w", data.StudentId, err)
 				return
 			}
-			fmt.Println(resp.StatusCode, data.StudentId)
-
 			// collect expired for later delete
 			if resp.StatusCode == http.StatusGone {
 				expiredSubs <- data
